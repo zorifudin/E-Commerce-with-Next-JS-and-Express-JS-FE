@@ -10,8 +10,11 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { useFormik } from "formik";
 import { Lasso } from "lucide-react";
+import useRegister from "@/hooks/api/auth/useRegister";
 
 const RegisterPage = () => {
+  const { mutateAsync: register, isPending } = useRegister();
+
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -20,8 +23,8 @@ const RegisterPage = () => {
       phoneNumber: "",
       password: "",
     },
-    onSubmit: (values) => {
-      alert(JSON.stringify(values));
+    onSubmit: async (values) => {
+      await register(values);
     },
   });
 
@@ -111,10 +114,11 @@ const RegisterPage = () => {
             </div>
 
             <Button
+              disabled={isPending}
               type="submit"
               className="w-full rounded-md bg-green-500 py-3 font-medium text-white hover:bg-green-600"
             >
-              Register
+              {isPending ? "Loading..." : "Register"}
             </Button>
           </form>
 
