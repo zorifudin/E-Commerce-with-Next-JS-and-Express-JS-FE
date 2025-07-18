@@ -6,10 +6,21 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { ShoppingCart, Heart, Search, Menu, X } from "lucide-react";
 import { Separator } from "./ui/separator";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { logoutAction } from "@/redux/slices/userSlices";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  const dispatch = useAppDispatch();
+
+  const user = useAppSelector((state) => state.user);
+
+  const logout = () => {
+    localStorage.removeItem("ecommerce");
+    dispatch(logoutAction());
+  };
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -143,15 +154,27 @@ const Navbar = () => {
               <Separator />
 
               <div className="flex flex-col space-y-2">
-                <Button
-                  variant="ghost"
-                  className="w-full text-green-600 hover:bg-green-50 hover:text-green-700"
-                >
-                  Log In
-                </Button>
-                <Button className="w-full rounded-md bg-green-500 px-6 py-2 font-medium text-white hover:bg-green-600">
-                  Sign Up
-                </Button>
+                <Link href="/login">
+                  <Button
+                    variant="ghost"
+                    className="w-full text-green-600 hover:bg-green-50 hover:text-green-700"
+                  >
+                    Log In
+                  </Button>
+                </Link>
+                <Link href="/register">
+                  <Button className="w-full rounded-md bg-green-500 px-6 py-2 font-medium text-white hover:bg-green-600">
+                    Sign Up
+                  </Button>
+                </Link>
+
+                {/* {user.id ? (
+                  <Button onClick={logout}>Logout</Button>
+                ) : (
+                  <Button className="w-full rounded-md bg-green-500 px-6 py-2 font-medium text-white hover:bg-green-600">
+                    Sign Up
+                  </Button>
+                )} */}
               </div>
             </div>
           </div>
